@@ -10,6 +10,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
+from os import environ
 
 
 #Create admin-only decorator
@@ -25,12 +26,12 @@ def admin_only(f):
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get("DATABASE_URL", "sqlite:///blog.db")  # if running locally use SQLite
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
